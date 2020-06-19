@@ -3,21 +3,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import PhoneInput from 'react-native-phone-input';
 import {connect} from 'react-redux';
 
-function mapDispatchToProps(dispatch){
+/*function mapDispatchToProps(dispatch){
     return {
         addHistory : (history) => dispatch({type:'ADD_PHONELOOKUP',history:history})
     }
-}
+} /*/
 class Phone extends Component {
     constructor() {
         super();
 
-        this.state = {
-            valid: "",
+        this.state =  {
+           /* valid: "",
             type: "",
-            value: "",
+            value: "", */
             caller_name: "",
-            phoneNumber: ""
+            phoneNumber: "" 
         };
 
         this.updateInfo = this.updateInfo.bind(this);
@@ -29,52 +29,57 @@ class Phone extends Component {
     };
 
     updateInfo() {
-        
-        console.log(this.state.phoneNumber);
-        fetch(`https://twilio-lookup.p.rapidapi.com/PhoneNumbers/caller-name?phoneNumber=${this.state.phoneNumber}`, {
-            "method": "GET",
-            "headers": {
-                "x-rapidapi-host": "twilio-lookup.p.rapidapi.com",
-                "x-rapidapi-key": "3e66c59a24msh59c0fa96f66ee46p1b8b44jsnd50f07d63fcf"
-            }
-        })
+                
+      
+            console.log(this.state.phoneNumber);
+            fetch(`https://twilio-lookup.p.rapidapi.com/PhoneNumbers/caller-name?phoneNumber=${this.state.phoneNumber}`, {
+                "method": "GET",
+                "headers": {
+                    "x-rapidapi-host": "twilio-lookup.p.rapidapi.com",
+                    "x-rapidapi-key": "3e66c59a24msh59c0fa96f66ee46p1b8b44jsnd50f07d63fcf"
+                }
+            })
             .then(response => response.json())
             .then(response => {
                 console.log(response);
-                this.props.addHistory({
+
+                /*this.props.addHistory({
                     phoneNumber: response.phoneNumber,
                     caller_name: response.callerName.caller_name
-                });
+                }); */
                 console.log(response.callerName.caller_name);
+                console.log('you are ready to set state ', response.phoneNumber);
                 this.setState({
-                phoneNumber: response.phoneNumber,
-                caller_name: response.callerName.caller_name
-            });
-            })
+                phoneNumber : response.phoneNumber,
+                caller_name : response.callerName.caller_name,
+                });
+                (console.log('phone number set to ', this.state.phoneNumber));
+                (console.log('phone name set to ', this.state.caller_name));
+                (console.log('your json is ',JSON.stringify(this.state)));
+
+                fetch ('http://10.0.2.2:3000/phone', {
+                    method: "POST",
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(this.state)
+                })
+                .then(res => {
+                    console.log('we have return from server');
+                    res.text()});
+                })
             .catch(err => {
                 console.log(err);
             });
-            
-            
+      
     }
 
     renderInfo() {
         
             return (
                 <View style={styles.info}>
-                    <Text>
-                        Is Valid:{" "}
-                        <Text style={{ fontWeight: "bold" }}>
-                            {this.state.valid.toString()}
-                        </Text>
-                    </Text>
-                    <Text>
-                        Type: <Text style={{ fontWeight: "bold" }}>{this.state.type}</Text>
-                    </Text>
-                    <Text>
-                        Value:{" "}
-                        <Text style={{ fontWeight: "bold" }}>{this.state.value}</Text>
-                    </Text>
+                   
                     <Text>
                         Value:{" "}
                         <Text style={{ fontWeight: "bold" }}>{this.state.caller_name}</Text>
@@ -134,4 +139,5 @@ let styles = StyleSheet.create({
         backgroundColor: 'grey'
     }
 });
-export default  connect(null, mapDispatchToProps)(Phone);
+//export default  connect(null, mapDispatchToProps)(Phone);
+export default  Phone;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import Home from './HomeComponent';
 import Experience from './ExperienceComponent';
 import PhoneScreen from '../screens/PhoneScreen';
-import PhoneHistory from './PhoneHistory';
 import PhoneHistoryScreen from '../screens/PhoneHistoryScreen';
 import { View, Platform, StyleSheet } from 'react-native';
 import { createStackNavigator, createDrawerNavigator } from 'react-navigation';
